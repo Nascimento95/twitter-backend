@@ -39,9 +39,40 @@ app.get('/', async (req, res) => {
 app.get('/:id', async (req, res) => {
     const { id } = req.params
     try {
-        const user = await User.findById(id).exec()
+        const user = await User.findById(id)
+            .populate("tweets")    
+            .exec()
         res.json(user)
         
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({error: err})
+    }
+})
+
+app.put('/:id', async (req, res) => {
+    const { id } = req.params
+
+    try {
+        const user = await User.findOneAndUpdate(
+            {_id : id},
+            {...req.body},
+            {new: true}
+        ).exec()
+
+        res.json(user)
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ error: err })
+    }
+})
+
+app.delete('/:id', async (req, res) => {
+    const {id} = req.params
+
+    try {
+        await User.deleteOne({_id: id}).exec()
+        res.json({success : 'User deleted'})
     } catch (err) {
         console.log(err);
         res.status(500).json({error: err})
