@@ -22,6 +22,10 @@ db.once('open', () => {
   console.log(`Connection to ${dbName} established`)
 })
 
+require('./models/Tweet')
+require('./models/User')
+require('./models/Comment')
+
 app.use(express.json())
 
 app.use('/users', usersRoutes)
