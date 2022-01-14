@@ -1,40 +1,49 @@
-// const express = require("express")
-// const app = express()
+const express = require("express")
+const app = express()
 
-// const Tweet = require ("../models/Tweet")
+const Tweet = require ("../models/Tweet")
  
- // Créer une route qui permet d'afficher les tweets BACKEND
-//  app.get('/tweet', async (req, res) => {
-//      try {
-//        const tweet = await tweet.find()
-//          .populate(' tweet')
-//          .exec()
-  
-//        res.json(Tweet)
-//      } catch (err) {
-//        console.log(err)
-//        res.status(500).json({ error: err })
-//      }
-//    })
-  
-//    // Créer une route qui permet de supprimer un tweet BACKEND
-
-//    app.delete('/:id', async (req, res) => {
-//      const { author, content } = req.params
-  
-//      try {
-//        await Tweet.deleteOne({ _id: id }).exec()
-//        res.json({ success: 'Tweet deleted' })
-   
-//      } catch (err) {
-//        console.log(err)
-//        res.status(500).json({ error: err })
-//      }
-//    })
-
-
-
-
+// route qui crée un tweet 
+app.post("/", (req, res) => {
+    // 1ere méthode
+    // on crée un nouveau tweet avec le model tweet
+    const tweet = new Tweet({
+        ...req.body
+      })
+    
+    tweet.save((err, tweet) => {
+          // si il y a une erreur 
+        if (err) {
+          res.status(500).json({ error: err })
+          return
+        }
+          //sinon tu me renvoie le tweet (l'objet) crée
+        res.json(tweet)
+    })
+})
 
 // Créer une route qui permet d'afficher les tweets BACKEND
+app.get("/", async (req, res) => {
+    try {
+        const tweet = await Tweet.find().select("-createdAt -updatedAt -__v").exec()
+        res.json(tweet)
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
+})
 
+// route qui permet de supprimer un tweet
+app.delete("/:id",async (req, res) => {
+    const { id } = req.params
+
+    try {
+        // on utilise la methode de mongoose deleteOne avec la comparaison 
+        // qui lui permet de cibler le bonne élément 
+        await Tweet.deleteOne({ _id: id }).exec()
+        res.status(200).json({ success: "tweet deleted" })
+    } catch(err) {
+        res.status(500).json({ error: err })
+    }
+})
+
+module.exports = app

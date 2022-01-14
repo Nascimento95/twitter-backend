@@ -15,7 +15,7 @@ mongoose.connect(dbUrl)
 const db = mongoose.connection
 
 db.on('error', (err) => {
-  console.log(err)
+  console.log("mon erreur serveur de connection",err)
 })
 
 db.once('open', () => {
@@ -29,10 +29,10 @@ require('./models/Comment')
 app.use(express.json())
 
 app.use('/users', usersRoutes)
-// app.use('/tweets', tweetsRoutes)
+app.use('/tweets', tweetsRoutes)
 app.use('/comments', commentsRoutes)
 
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
-  })
+})
