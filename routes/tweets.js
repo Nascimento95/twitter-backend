@@ -24,6 +24,7 @@ app.post("/", (req, res) => {
 
 // Créer une route qui permet d'afficher les tweets BACKEND
 app.get("/", async (req, res) => {
+    
     try {
         const tweet = await Tweet.find().select("-createdAt -updatedAt -__v").exec()
         res.json(tweet)
