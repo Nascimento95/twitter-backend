@@ -15,7 +15,7 @@ mongoose.connect(dbUrl)
 const db = mongoose.connection
 
 db.on('error', (err) => {
-  console.log(err)
+  console.log("mon erreur serveur de connection",err)
 })
 
 db.once('open', () => {
