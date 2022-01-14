@@ -29,10 +29,10 @@ require('./models/Comment')
 app.use(express.json())
 
 app.use('/users', usersRoutes)
-// app.use('/tweets', tweetsRoutes)
+app.use('/tweets', tweetsRoutes)
 app.use('/comments', commentsRoutes)
 
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`)
-  })
+})
