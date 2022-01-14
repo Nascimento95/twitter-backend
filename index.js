@@ -9,7 +9,7 @@ const dbUrl = `mongodb+srv://EloiGry:aXy7Hf6aHi6Kknu@${dbName}.mnbcn.mongodb.net
 const usersRoutes = require("./routes/users")
 const tweetsRoutes = require("./routes/tweets")
 const commentsRoutes = require("./routes/comments")
-
+const uploadRoutes = require("./routes/uploeadPicture")
 
 mongoose.connect(dbUrl)
 const db = mongoose.connection
@@ -26,11 +26,13 @@ require('./models/Tweet')
 require('./models/User')
 require('./models/Comment')
 
-app.use(express.json())
 
+app.use(express.json())
+app.use(express.static("public"))
 app.use('/users', usersRoutes)
 // app.use('/tweets', tweetsRoutes)
 app.use('/comments', commentsRoutes)
+app.use('/upload', uploadRoutes)
 
 
 app.listen(port, () => {
