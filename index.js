@@ -1,7 +1,7 @@
 const express = require("express")
 const app = express()
 const port = 5000
-// const cors = require('cors')
+const cors = require('cors')
 const session = require("express-session")
 const passport = require("./config/passport")
 const mongoose = require("mongoose")
@@ -41,10 +41,10 @@ app.use(session({
   saveUninitialized: false
 }))
 // permet au front de récup le backend
-// app.use(cors({
-//   origin: 'http://localhost:3000',
-//   credentials: true
-// }))
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}))
 // permet s'utiliser passport et de lier passport a express
 app.use(passport.initialize())
 app.use(passport.session())
