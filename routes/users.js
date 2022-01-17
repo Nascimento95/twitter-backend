@@ -29,7 +29,7 @@ app.post('/',sameNameAndEmail, async (req, res) => {
 // route qui permet de voir les utilisateurs
 app.get('/', async (req, res) => {
     try {
-        const users = await User.find().exec()
+        const users = await User.find().populate("tweets").exec()
         res.json(users)
     } catch (err) {
         console.log(err);

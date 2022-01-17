@@ -3,9 +3,6 @@ const app = express()
 const Comment = require("../models/Comment")
 const User = require ("../models/User")
 
-const express = require("express")
-const app = express()
-
 // Route pour creer un commentaire et ajouter un commentaire 
 app.post('/', async (req, res) => {
     const { author, content , tweet } = req.body
