@@ -1,12 +1,13 @@
 const express = require("express")
 const app = express()
-
+const {sameNameAndEmail} = require('../middlewares/userSignup')
 // const Tweet = require("../models/Tweet")
 const User = require("../models/User")
 // const Comment = require("../models/Comment")
 
-
-app.post('/', async (req, res) => {
+// route qui crée un utilisateur avec un middlewares qui permet
+// de savoir si name et email existe deja en base de donnée
+app.post('/',sameNameAndEmail, async (req, res) => {
     try {
         const user = new User({
             ...req.body
@@ -25,7 +26,7 @@ app.post('/', async (req, res) => {
         res.status(500).json({ error: err })
     }
 })
-
+// route qui permet de voir les utilisateurs
 app.get('/', async (req, res) => {
     try {
         const users = await User.find().exec()
