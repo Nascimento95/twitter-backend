@@ -1,5 +1,4 @@
 const express = require("express")
-const { json } = require("express/lib/response")
 const app = express()
 // import de la config passport faite 
 const passport = require('../config/passport')
@@ -14,6 +13,7 @@ app.post("/login", passport.authenticate("local"), (req, res) => {
             if(err) {
                 console.log(err);
             } else {
+
                 res.json(req.user)
             }
         })
@@ -21,7 +21,7 @@ app.post("/login", passport.authenticate("local"), (req, res) => {
 })
 //  route qui permet d avoir accés au contenur apres la connection (test)
 // cette route me montre que je sui connecter sinon jai pas acces au doné
-app.get("/",async (req, res) => {
+app.get("/", async (req, res) => {
     const {user} =  req
     const users = await user.find()
     // si je suis connecter tu me renvoi l'utilisateur connecter

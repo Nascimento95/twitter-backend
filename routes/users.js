@@ -4,7 +4,7 @@ const {sameNameAndEmail} = require('../middlewares/userSignup')
 // const Tweet = require("../models/Tweet")
 const User = require("../models/User")
 // const Comment = require("../models/Comment")
-
+const {verifyUser} = require('../middlewares/verifyUser')
 // route qui crée un utilisateur avec un middlewares qui permet
 // de savoir si name et email existe deja en base de donnée
 app.post('/',sameNameAndEmail, async (req, res) => {
@@ -29,7 +29,20 @@ app.post('/',sameNameAndEmail, async (req, res) => {
 // route qui permet de voir les utilisateurs
 app.get('/', async (req, res) => {
     try {
-        const users = await User.find().exec()
+        const users = await User.find()
+        .populate({
+            path: 'tweets',
+            populate: {
+                path: 'author',
+                select: 'pseudo',
+            },
+            populate : {
+                path : 'comments',
+                select : 'content author',
+            }   
+        }
+        )
+        .exec()
         res.json(users)
     } catch (err) {
         console.log(err);
@@ -41,7 +54,22 @@ app.get('/:id', async (req, res) => {
     const { id } = req.params
     try {
         const user = await User.findById(id)
-            .populate("tweets")    
+            .populate({
+                path: 'followers', 
+                select: 'pseudo followers following tweets retweets',
+            })   
+            .populate({
+                path : 'following',
+                select: 'pseudo followers following tweets retweets',
+            })
+            .populate({
+                path: 'tweets',
+                select: 'content author'
+            })
+            .populate({
+                path: 'retweets',
+                select: 'content author'
+            })
             .exec()
         res.json(user)
         
@@ -51,7 +79,7 @@ app.get('/:id', async (req, res) => {
     }
 })
 
-app.put('/:id', async (req, res) => {
+app.put('/:id',verifyUser, async (req, res) => {
     const { id } = req.params
 
     try {
@@ -68,7 +96,7 @@ app.put('/:id', async (req, res) => {
     }
 })
 
-app.delete('/:id', async (req, res) => {
+app.delete('/:id',verifyUser, async (req, res) => {
     const {id} = req.params
 
     try {
