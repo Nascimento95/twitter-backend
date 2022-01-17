@@ -14,6 +14,7 @@ const authRoutes = require("./routes/authentification")
 const dbName = "twittercluster"
 const dbUrl = `mongodb+srv://EloiGry:aXy7Hf6aHi6Kknu@${dbName}.mnbcn.mongodb.net/test`
 
+const uploadRoutes = require("./routes/uploeadPicture")
 
 mongoose.connect(dbUrl)
 const db = mongoose.connection
@@ -49,10 +50,13 @@ app.use(cors({
 app.use(passport.initialize())
 app.use(passport.session())
 
+app.use(express.json())
+app.use(express.static("public"))
 app.use('/users', usersRoutes)
 app.use('/tweets', tweetsRoutes)
 app.use('/comments', commentsRoutes)
 app.use('/auth', authRoutes)
+app.use('/upload', uploadRoutes)
 
 
 app.listen(port, () => {
