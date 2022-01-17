@@ -2,9 +2,10 @@ const express = require ("express")
 const app = express()
 const Comment = require("../models/Comment")
 const User = require ("../models/User")
+const {verifyUser} = require('../middlewares/verifyUser')
 
 // Route pour creer un commentaire et ajouter un commentaire 
-app.post('/', async (req, res) => {
+app.post('/',verifyUser, async (req, res) => {
     const { author, content , tweet } = req.body
     console.log("valeur de author =>",author);
     try {
@@ -31,7 +32,7 @@ app.post('/', async (req, res) => {
 })
   
   // Effacer un commentaire => DELETE 
-app.delete('/:id', async (req, res) => {
+app.delete('/:id',verifyUser, async (req, res) => {
   const { id } = req.params
 
   try {

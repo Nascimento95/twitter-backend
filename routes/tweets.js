@@ -1,10 +1,10 @@
 const express = require("express")
 const app = express()
-
+const {verifyUser} = require('../middlewares/verifyUser')
 const Tweet = require ("../models/Tweet")
  
 // route qui crée un tweet 
-app.post("/", (req, res) => {
+app.post("/",verifyUser, (req, res) => {
     // 1ere méthode
     // on crée un nouveau tweet avec le model tweet
     const tweet = new Tweet({
@@ -26,7 +26,17 @@ app.post("/", (req, res) => {
 app.get("/", async (req, res) => {
     
     try {
-        const tweet = await Tweet.find().select("-createdAt -updatedAt -__v").exec()
+        const tweet = await Tweet.find()
+        .populate({
+            path : 'comments',
+            select: 'content author createdAt updatedAt'
+        })
+        .populate({
+            path: 'author',
+            select: 'name pseudo'
+            
+        })
+        .exec()
         res.json(tweet)
     } catch (err) {
         res.status(500).json({ error: err })
@@ -34,7 +44,7 @@ app.get("/", async (req, res) => {
 })
 
 // route qui permet de supprimer un tweet
-app.delete("/:id",async (req, res) => {
+app.delete("/:id",verifyUser ,async (req, res) => {
     const { id } = req.params
 
     try {

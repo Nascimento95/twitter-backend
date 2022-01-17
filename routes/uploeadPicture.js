@@ -7,11 +7,11 @@ const moment = require("moment")
 const User = require ("../models/User")
 //Confuguration doit etre tout seul
 const upload = multer({ dest: 'public' })
-
+const {verifyUser} = require('../middlewares/verifyUser')
 
 
 app.post( // Permet de cree une route avec la methode post
-    '/:id/file', // Chemin de route avec param dynamique qui se nomme id
+    '/:id/file',verifyUser, // Chemin de route avec param dynamique qui se nomme id
     upload.single('photo'), // Middlware de multer qui permet de telecharge des photos 
     async (req, res) => // Fonction Call back asyncrohone qui prend deux parametres 
     {

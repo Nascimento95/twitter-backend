@@ -9,7 +9,13 @@ passport.use(new LocalStrategy(async (username, password, done) => {
     // console.log(username);
     // console.log(password);
     // on cherche l'utilisateur 
-    const user = await Users.findOne({ name: username , password: password });
+    const user = await Users.findOne({ name: username, password: password })
+    .populate({ path: 'followers'})
+    .populate({ path: 'following'})
+    .populate({ path: 'tweets'})
+    .populate({ path: 'retweets'})
+    .populate({ path: 'comments'})
+    .exec()
     // si je ne trouve pas d'utilisateur me renvoi pas autoriser sur postman
     if (!user) {
         return done(null, false)
