@@ -29,7 +29,7 @@ app.post( // Permet de cree une route avec la methode post
             await user.save()    // Je sauvegarde la modification dans la base de donnée
 
             res.json({  // Je retourne une reponse sous format Json 
-                profilePicture:user.profilePicture   
+                profilePicture: user.profilePicture   
             })
         }catch (err) { // En cas d'erreure je l'attrape et je la stocke dans le parametre erreur
             console.log(err)
