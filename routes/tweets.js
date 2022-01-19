@@ -2,23 +2,25 @@ const express = require("express")
 const app = express()
 const {verifyUser} = require('../middlewares/verifyUser')
 const Tweet = require ("../models/Tweet")
-const User = require("../models/User")
- 
+const User = require ("../models/User")
 // route qui crée un tweet 
-app.post("/",verifyUser, (req, res) => {
+app.post("/",verifyUser, async (req, res) => {
     // 1ere méthode
     // on crée un nouveau tweet avec le model tweet
     const tweet = new Tweet({
         ...req.body
     }) 
     
-    tweet.save((err, tweet) => {
+    
+    
+    tweet.save(async (err, tweet) => {
           // si il y a une erreur 
         if (err) {
           res.status(500).json({ error: err })
           return
         }
-        User.findOneAndUpdate({_id:tweet.author},{ $push:{tweets:tweet._id}})
+
+        await User.updateOne({_id:tweet.author},{ $push:{tweets:tweet._id.valueOf()}})
           //sinon tu me renvoie le tweet (l'objet) crée
         res.json(tweet)
     })
