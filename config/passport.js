@@ -15,6 +15,7 @@ passport.use(new LocalStrategy(async (username, password, done) => {
     .populate({ path: 'tweets'})
     .populate({ path: 'retweets'})
     .populate({ path: 'comments'})
+    .lean()
     .exec()
     // si je ne trouve pas d'utilisateur me renvoi pas autoriser sur postman
     if (!user) {
@@ -29,8 +30,8 @@ passport.serializeUser((user, done) => {
     done(null, user._id)
 })
 // permet de savoir si c'est le bonne utilisateur grace a l'id
-passport.deserializeUser((id, done) => {
-    const user = Users.findOne({ _id: id})
+passport.deserializeUser(async (id, done) => {
+    const user = await Users.findOne({ _id: id})
     done(null, user)
 })
 

@@ -19,18 +19,13 @@ app.post("/login", passport.authenticate("local"), (req, res) => {
         })
     }
 })
-//  route qui permet d avoir accés au contenur apres la connection (test)
-// cette route me montre que je sui connecter sinon jai pas acces au doné
-app.get("/", async (req, res) => {
-    const {user} =  req
-    const users = await user.find()
-    // si je suis connecter tu me renvoi l'utilisateur connecter
-    // sinon une erreur pas autorizé
-    if (user) {
-        res.json(users)
+//  route qui permet de rester connecté peu importe les intempéries
+app.get("/me", async (req, res) => {
+    console.log(req.user)
+    if (req.user) {
+        res.json(req.user)
     } else {
         res.status(401).json({ error: "Unauthorized"})
     }
-    // console.log("route hahah",users);
 })
 module.exports = app
