@@ -1,4 +1,5 @@
 const { Schema, model } = require("mongoose")
+const { schema } = require("./Comment")
 
 const UserSchema = Schema({
   name : {
@@ -44,6 +45,7 @@ const UserSchema = Schema({
 }, {
     timestamps: true
 })
+
 
 const User = model('User', UserSchema)
 

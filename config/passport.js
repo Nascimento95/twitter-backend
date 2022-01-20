@@ -10,13 +10,13 @@ passport.use(new LocalStrategy(async (username, password, done) => {
     // console.log(password);
     // on cherche l'utilisateur 
     const user = await Users.findOne({ name: username, password: password })
-    .populate({ path: 'followers'})
-    .populate({ path: 'following'})
-    .populate({ path: 'tweets'})
-    .populate({ path: 'retweets'})
-    .populate({ path: 'comments'})
-    .lean()
-    .exec()
+        .populate({ path: 'followers'})
+        .populate({ path: 'following'})
+        .populate({ path: 'tweets'})
+        .populate({ path: 'retweets'})
+        .populate({ path: 'comments'})
+        .lean()
+        .exec()
     // si je ne trouve pas d'utilisateur me renvoi pas autoriser sur postman
     if (!user) {
         return done(null, false)
@@ -32,6 +32,14 @@ passport.serializeUser((user, done) => {
 // permet de savoir si c'est le bonne utilisateur grace a l'id
 passport.deserializeUser(async (id, done) => {
     const user = await Users.findOne({ _id: id})
+        .populate({ path: 'followers'})
+        .populate({ path: 'following'})
+        .populate({ path: 'tweets'})
+        .populate({ path: 'retweets'})
+        .populate({ path: 'comments'})
+        .lean()
+        .exec()
+
     done(null, user)
 })
 
