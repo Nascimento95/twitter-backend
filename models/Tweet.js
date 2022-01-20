@@ -9,8 +9,18 @@ const TweetSchema = Schema({
   comments : [{ type: Schema.Types.ObjectId, ref: "Comment" }],
   retweets : [{ type: Schema.Types.ObjectId, ref: "User" }],
 },{
-    timestamps: true,
-  })
+  timestamps: true,
+})
+
+TweetSchema.post('findOneAndDelete', async function(tweet) {
+ await model('User').findOneAndUpdate(
+    {_id: tweet.author},
+    {$pull:{tweets:tweet._id}}
+  )
+
+  console.log(tweet);
+})
+
 
 
 const Tweet = model('Tweet', TweetSchema)

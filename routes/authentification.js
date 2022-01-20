@@ -21,7 +21,7 @@ app.post("/login", passport.authenticate("local"), (req, res) => {
 })
 //  route qui permet de rester connecté peu importe les intempéries
 app.get("/me", async (req, res) => {
-    console.log(req.user)
+    // console.log(req.user)
     if (req.user) {
         res.json(req.user)
     } else {

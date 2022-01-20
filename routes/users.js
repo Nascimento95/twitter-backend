@@ -39,9 +39,9 @@ app.get('/', async (req, res) => {
             populate : {
                 path : 'comments',
                 select : 'content author',
-            }   
+            },  
         }
-        )
+        ).populate('following')
         .exec()
         res.json(users)
     } catch (err) {
