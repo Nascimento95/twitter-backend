@@ -11,6 +11,15 @@ const CommentSchema = Schema({
   timestamps: true,
 })
 
+CommentSchema.post('save', async function(comment) {
+  console.log('Hello la poissonerie')
+  await model('Tweet').findOneAndUpdate(
+     {_id: comment.tweet},
+     {$push:{comments:comment._id}}
+   )
+   console.log(comment);
+})
+
 
 const Comment= model('Comment', CommentSchema)
 
